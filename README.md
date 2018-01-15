@@ -22,10 +22,14 @@ The goals / steps of this project are the following:
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/augmented.png "Augmented"
 [image4]: ./examples/aug_visualization.png "Visualization"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image5]: ./signs_from_internet/4_70kmph.jpg "Traffic Sign 1"
+[image6]: ./signs_from_internet/12_priority.jpg "Traffic Sign 2"
+[image7]: ./signs_from_internet/14_stop.jpg "Traffic Sign 3"
+[image8]: ./signs_from_internet/25_roadwork.jpg "Traffic Sign 4"
+[image9]: ./signs_from_internet/28_children.jpg "Traffic Sign 5"
+[image10]: ./signs_from_internet/33_right_turn.jpg "Traffic Sign 6"
+[image11]: ./signs_from_internet/38_keep_right.jpg "Traffic Sign 7"
+[image12]: ./examples/predictions.png "Predictions"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -87,7 +91,7 @@ Processed Shapes X_train:(43880, 32, 32, 1), y_train:(43880,)
 
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
-
+I used the same LeNet model from the lesson with dropouts in the Fully connected layers.
 My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
@@ -102,47 +106,36 @@ My final model consisted of the following layers:
 | Fully connected		| input = 400, outputs = 120        									|
 | RELU					|												|
 | Dropout |           |
-| Fully connected		| input = 400, outputs = 120        									|
+| Fully connected		| input = 120, outputs = 84        									|
 | RELU					|												|
 | Dropout |           |
-| Fully connected		| input = 400, outputs = 120        									|
+| Fully connected		| input = 84, outputs = 43        									|
 
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+To train the model, I used the same Adam Optimizer from LeNet lesson. I set the batch size to be 256 becuase that fits the data within the memory limit of my current GPU. I tried various epochs and noticed that after 30 epochs there was not much improvent in the accuracy. Lowering the learning rate reduced the accuracy so I kept it at 0.001
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 0.995
+* validation set accuracy of 0.960  
+* test set accuracy of 0.935
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+The only change I made to the model was adding dropout layers. Addition of dropout layer if helpful in reducing overfitting of the model.
 
 ### Test a Model on New Images
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are seven German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image5] ![alt text][image6] ![alt text][image7] ![alt text][image8]
+![alt text][image9] ![alt text][image10] ![alt text][image11]
 
-The first image might be difficult to classify because ...
+Among the images found on the internet, the image of stop sign is slightly out of image bounds which could cause it to be misclassified.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -150,35 +143,23 @@ Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Speed limit (70km/h)      		| Speed limit (70km/h)   									| 
+| Priority road     			| Priority road 										|
+| Stop					| General caution											|
+| Road work	      		| Road work					 				|
+| Children crossing			| Children crossing      							|
+| Turn right ahead			| Turn right ahead      							|
+| Keep right			| Keep right      							|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 6 of the 7 traffic signs, which gives an accuracy of 85.7%. This is quite low compared to the test accuracy of 93.5%.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+The code for making predictions on my final model is located at (https://github.com/psharm8/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb#Predict-the-Sign-Type-for-Each-Image)
 
 
-For the second image ... 
-
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-
+![alt text][image12]
 
 
 
